@@ -4,6 +4,8 @@ Very often your environment variables are saved in json files named after the en
 
 This module takes whatever is in `process.env.NODE_ENV` and uses that to load the appropriate json file. If `process.env.NODE_ENV` is not set it uses `development`.
 
+If environment file is not found in current folder the module will go up to the parent folder, etc, etc, until it is found. If not found `load-environment` will throw an error.
+
 ## Installation
 
 ```
