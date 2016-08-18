@@ -4,9 +4,10 @@ var path = require('path')
 var initFilename;
 var environmentName = process.env.NODE_ENV || 'development'
 var dirname = path.dirname(require.main.filename)
-load(dirname)
+load(dirname, 'local')
+load(dirname, environmentName)
 
-function load (dirname) {
+function load (dirname, environmentName) {
   var filename = path.join(dirname, environmentName + '.json')
   var exists = fs.existsSync(filename)
 
@@ -19,6 +20,6 @@ function load (dirname) {
   } else {
     var parentDir = path.dirname(dirname)
     if (dirname === parentDir) throw new Error('No environment file: ' + initFilename + ' (Also checked all parent folders)')
-    load(parentDir)
+    load(parentDir, environmentName)
   }
 }
