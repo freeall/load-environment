@@ -15,6 +15,8 @@ function load (dirname, environmentName) {
   if (exists) {
     var environment = require(filename)
     Object.keys(environment).forEach(function (key) {
+      if (process.env[key]) return // Ignore if already set
+
       process.env[key] = environment[key]
     })
   } else {
