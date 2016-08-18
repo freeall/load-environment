@@ -21,7 +21,8 @@ function load (dirname, environmentName) {
     })
   } else {
     var parentDir = path.dirname(dirname)
-    if (dirname === parentDir) throw new Error('No environment file: ' + initFilename + ' (Also checked all parent folders)')
+    if (dirname === parentDir) return // No environment file found in any ancestor's dir
+
     load(parentDir, environmentName)
   }
 }
