@@ -1,7 +1,7 @@
 {
   "name": "load-environment",
   "version": "2.0.0",
-  "description": "Simply load your environment from name-of-your-environment.json. Takes the name from process.env.NODE_ENV.",
+  "description": "A safe and simple way to handle environment variables and secrets in your projects",
   "main": "index.js",
   "author": "Tobias Baunbæk Christensen <freeall@gmail.com>",
   "license": "ISC"

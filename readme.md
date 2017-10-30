@@ -1,12 +1,14 @@
 # load-environment
 
-Very often have the environment variables for a specific environment in json files named after the environment, e.g. `development.json`, `staging.json`, `production.json`, etc. 
+A secure way of setting and loading environment variables in your projects. In this way source code can always assume that environemt variables have been set and don't need to check which environment it is in.
 
-This module takes whatever is in `process.env.NODE_ENV` and uses that to load the appropriate environment file. If `NODE_ENV` is not set it defaults to `development`.
+* Put your environment variables into files named after your environment like `development.json`, `staging.json`, `production.json`, etc. These files should be committed into your repository. Do *NOT* put sensitive information into those files.
 
-Before even loading the environment file, it tries to load `local.json`. The reason is that in many cases `local.json` would be in `.gitignore` and contain environment variables you are not keen on sharing.
+* Sensitive information goes into `local.json`. This file should be ignored from your repository. Send it around to others by means other than source control.
 
-If the environment file is not found in the current folder it will keep looking in all ancestral folders, similar to the way node loads modules.
+* In your non-development environments it is assumed that secrets have been put into environment variables in some other (secure) way.
+
+`load-environment` works similar to the way `node_modules` works, by moving upwards the folder structure until it reaches the root. On the way it loads all `local.json` files. It also looks into `process.env.NODE_ENV` and loads files named `${process.env.NODE_ENV}.json`. It defaults to `development.json`.
 
 No environment variables already set will be overwritten.
 
@@ -20,43 +22,55 @@ $ npm install load-environment --save
 
 ## Usage
 
-
-
-### For development
-
-If `process.env.NODE_ENV` is not set `load-environment` defaults to `development.json` so it's not needed to be set. It can also be convenient to *not* store somewhat sensitive data in github. These variables should go to `local.json` which you should put in your `.gitignore`.
-
-Note that `local.json` is loaded before `development.json`.
-
-**local.json**
-
-``` json
-{
-  "SECRET_TOKEN": "yoyoma",
-  "SOME_KEY": "text1"
-}
+``` js
+require('load-environment')
 ```
+
+At require-time it will load all the environment files it can find.
+
+
+## Example
+
+In this example a server which will have different host and ports depending on the environment. When developing locally there is a `local.json` which include secrets we don't want to add to our source control.
 
 **development.json**
-
 ``` json
 {
-  "FOO": "bar",
-  "SOME_KEY": "text2" // SOME_KEY already exists, so will be ignore
+  "NODE_ENV": "development",
+  "HOST": "localhost",
+  "PORT": 3000
 }
 ```
 
-** index.js ***
-
-``` js
-console.log(process.env.FOO) // undefined
-require('load-environment')
-console.log(process.env.FOO) // "bar"
-console.log(process.env.SECRET_TOKEN) // "yoyoma"
-console.log(process.env.SOME_KEY) // "text1" - from local.json
+**staging.json**
+``` json
+{
+  "HOST": "myapp-staging.herokuapp.com",
+  "PORT": 80
+}
 ```
 
-### For other environments
+**production.json**
+``` json
+{
+  "HOST": "myapp.com",
+  "PORT": 80
+}
+```
 
-Assumes the `NODE_ENV` environment variable is set, and loads from that one. Will still try to load `local.json`.
+**local.json**
+``` json
+{
+  "AWS_ACCESS_KEY_ID": "abc123123123",
+  "AWS_SECRET_ACCESS_KEY": "9234ksdfkj4asdfghjkl"
+}
+```
 
+
+### Code example
+
+``` js
+console.log(process.env.PORT) // undefined
+require('load-environment')
+console.log(process.env.PORT) // 3000 or 80, depending on the environment
+```
