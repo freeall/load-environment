@@ -2,8 +2,8 @@
 
 A secure way of setting and loading environment variables in your projects. In this way source code can always assume that environemt variables have been set and don't need to check which environment it is in.
 
-* Put your environment variables into files named after your environment like `development.json`, `staging.json`, `production.json`, etc. These files should be committed into your repository. Do *NOT* put sensitive information into those files.
-* Sensitive information goes into `local.json`. This file should be ignored from your repository. Send it around to others by means other than source control.
+* Put your environment variables into files named after your environment like `development.json`, `staging.json`, `production.json`, etc. These files should be committed into your repository. Do **NOT** put sensitive information into those files.
+* Sensitive information goes into `local.json`. This file should be ignored from your repository. Send it around to others by means other than source control.
 * In your non-development environments it is assumed that secrets have been put into environment variables in some other (secure) way.
 
 `load-environment` works similar to the way `node_modules` works, by moving upwards the folder structure until it reaches the root. On the way it loads all `local.json` files. It also looks into `process.env.NODE_ENV` and loads files named `${process.env.NODE_ENV}.json`. It defaults to `development.json`.
@@ -56,7 +56,7 @@ In this example a server which will have different host and ports depending on t
 }
 ```
 
-**local.json**
+**local.json** - this is not checked into your source control
 ``` json
 {
   "AWS_ACCESS_KEY_ID": "abc123123123",
