@@ -1,6 +1,6 @@
 {
   "name": "load-environment",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A safe and simple way to handle environment variables and secrets in your projects",
   "main": "index.js",
   "author": "Tobias Baunbæk Christensen <freeall@gmail.com>",
